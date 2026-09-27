@@ -1,0 +1,99 @@
+
+
+{% extends "admin/admin_index1.html" %}
+{% block body %}
+<head>
+    <title>Verify Expert</title>
+{#    <style>#}
+{#        body {#}
+{#            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans",#}
+{#                 "Apple Color Emoji","Segoe UI Emoji";#}
+{#        .container {#}
+{#            background-color: #fff;#}
+{#            padding: 20px;#}
+{#            border-radius: 8px;#}
+{#            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);#}
+{#        }#}
+{#        h1 {#}
+{#            color: #333;#}
+{#            margin-bottom: 20px;#}
+{#        }#}
+{#        table {#}
+{#            width: 100%;#}
+{#            border-collapse: collapse;#}
+{#            margin-top: 20px;#}
+{#        }#}
+{#        th, td {#}
+{#            border: 1px solid #ddd;#}
+{#            padding: 8px;#}
+{#            text-align: left;#}
+{#        }#}
+{#        th {#}
+{#            background-color: #f2f2f2;#}
+{#        }#}
+{#        .ab .accept {#}
+{#            background-color: #4CAF50;#}
+{#            color: white;#}
+{#        }#}
+{#        .ab .reject {#}
+{#            background-color: #f44336;#}
+{#            color: white;#}
+{#        }#}
+{#        .qualification-new {#}
+{#            color: blue;#}
+{#            font-weight: bold;#}
+{#        }#}
+{#    </style>#}
+</head>
+<body>
+    <div class="container">
+        <h1 id="ab"> Verify Expert</h1>
+        <p>Tick Accept or Reject for each entry.</p>
+        <table class="table table-bordered table-danger">
+            <thead>
+                <tr>
+                    <th>SI</th>
+                    <th>Name</th>
+                    <th>Contact</th>
+                    <th>Address</th>
+                    <th>Qualification</th>
+                    <th>Certificates</th>
+                    <th align="center"  colspan="2">Action</th>
+                </tr>
+            </thead>
+
+            {% for i in data %}
+            <tbody>
+                <tr>
+                  <td>{{ forloop.counter }}</td>
+                    <td>{{ i.name }}</td>
+                    <td>{{ i.email }}<br> {{ i.phone }}</td>
+                    <td>{{ i.place }}<br>{{ i.post }}</td>
+                    <td>{{ i.qualification }}</td>
+                   <td>
+    <a href="{{ i.certificate.url }}">Certificate</a><br>
+
+    {% if i.certificate1 %}
+        <a href="{{ i.certificate1.url }}">Certificate</a>
+    {% endif %}
+                       <br>
+    {% if i.certificate2 %}
+        <a href="{{ i.certificate2.url }}">Certificate</a>
+    {% endif %}
+</td>
+                    <td>
+                        {% if i.status == 'pending' %}
+                        <a href="/myapp/accept_expert/{{ i.id }}" class="btn btn-success">Accept</a>
+                    <br><br><a href="/myapp/reject_expert/{{ i.id }}" class="btn btn-danger" onclick="return confirm('Are You Sure')">Reject</a>
+
+                    {% else %}{{ i.status }}{% endif %}
+                    </td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    </div>
+</body>
+
+{% endblock %}
+</html>

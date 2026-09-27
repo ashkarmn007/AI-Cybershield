@@ -1,0 +1,364 @@
+{##}
+{##}
+{#{% extends "expert/index.html" %}#}
+{#{% block body %}#}
+{##}
+{#<style>#}
+{#.post-img {#}
+{#    height: 260px;#}
+{#    object-fit: cover;#}
+{#}#}
+{##}
+{#.like-btn {#}
+{#    cursor: pointer;#}
+{#    font-size: 22px;#}
+{#    transition: 0.2s;#}
+{#}#}
+{##}
+{#.like-btn:hover {#}
+{#    transform: scale(1.2);#}
+{#}#}
+{##}
+{#.liked {#}
+{#    color: #0d6efd;#}
+{#}#}
+{##}
+{#.post-card {#}
+{#    border-radius: 12px;#}
+{#    overflow: hidden;#}
+{#}#}
+{##}
+{#.action-links a {#}
+{#    text-decoration: none;#}
+{#    margin-right: 15px;#}
+{#    font-weight: 600;#}
+{#}#}
+{##}
+{#.comment-box p {#}
+{#    margin-bottom: 6px;#}
+{#}#}
+{#</style>#}
+{##}
+{#<div class="container mt-4">#}
+{##}
+{#    <h3 class="text-center text-primary mb-4">#}
+{#        <u>My Posts</u>#}
+{#    </h3>#}
+{##}
+{#    <!-- ACTION BUTTONS -->#}
+{#    <div class="d-flex justify-content-center mb-4 action-links">#}
+{#        <a href="/myapp/expert_add_post/" class="btn btn-success btn-sm">#}
+{#            ➕ Add New#}
+{#        </a>#}
+{#        <a href="/myapp/expert_view_others_post/" class="btn btn-outline-primary btn-sm">#}
+{#            👥 Others Post#}
+{#        </a>#}
+{#    </div>#}
+{##}
+{#    {% for post in posts %}#}
+{#    <div class="card mb-4 shadow post-card">#}
+{##}
+{#        <img src="/media/{{ post.post }}" class="post-img card-img-top">#}
+{##}
+{#        <div class="card-body">#}
+{##}
+{#            <p class="fw-semibold">{{ post.caption }}</p>#}
+{##}
+{#            <!-- LIKE SECTION -->#}
+{#            <div class="mb-2">#}
+{#                {% if post.id in liked_posts %}#}
+{#                    <span class="like-btn liked"#}
+{#                          onclick="toggleLike({{ post.id }}, this)">👍</span>#}
+{#                {% else %}#}
+{#                    <span class="like-btn"#}
+{#                          onclick="toggleLike({{ post.id }}, this)">👍</span>#}
+{#                {% endif %}#}
+{#                <span class="ms-2 like-count badge bg-light text-dark">#}
+{#                    {{ post.like_set.count }} Likes#}
+{#                </span>#}
+{#            </div>#}
+{##}
+{#            <hr>#}
+{##}
+{#            <!-- COMMENTS -->#}
+{#            <div class="comment-box">#}
+{#                {% for c in post.comment_set.all %}#}
+{#                    <p>#}
+{#                        <b class="text-primary">{{ c.USERID.username }}</b> :#}
+{#                        {{ c.comment }}#}
+{#                    </p>#}
+{#                {% empty %}#}
+{#                    <p class="text-muted fst-italic">No comments yet</p>#}
+{#                {% endfor %}#}
+{#            </div>#}
+{##}
+{#            <!-- ADD COMMENT -->#}
+{#            <form method="POST" action="/myapp/comment/{{ post.id }}/">#}
+{#                {% csrf_token %}#}
+{#                <div class="input-group mt-3">#}
+{#                    <input type="text" name="comment" class="form-control"#}
+{#                           placeholder="Write a comment..." required>#}
+{#                    <button class="btn btn-primary">#}
+{#                        Post#}
+{#                    </button>#}
+{#                </div>#}
+{#            </form>#}
+{##}
+{#        </div>#}
+{#    </div>#}
+{#    {% endfor %}#}
+{##}
+{#</div>#}
+{##}
+{#<script>#}
+{#function toggleLike(postId, el) {#}
+{#    fetch(`/myapp/like/${postId}/`)#}
+{#    .then(res => res.json())#}
+{#    .then(data => {#}
+{#        el.classList.toggle('liked', data.liked);#}
+{#        el.nextElementSibling.innerText = data.count + " Likes";#}
+{#    });#}
+{#}#}
+{#</script>#}
+{##}
+{#{% endblock %}#}
+
+
+
+{% extends "expert/index.html" %}
+{% block body %}
+
+<style>
+/* Enhanced Social Media-like Styling */
+body {
+    background-color: #f0f2f5; /* Light gray background like Facebook/Instagram */
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+.post-img {
+    height: 400px; /* Taller images for a more feed-like feel */
+    object-fit: cover;
+    width: 100%;
+}
+
+.like-btn {
+    cursor: pointer;
+    font-size: 24px; /* Slightly larger for touch-friendly */
+    transition: all 0.3s ease;
+    color: #65676b; /* Neutral gray when not liked */
+}
+
+.like-btn:hover {
+    transform: scale(1.1);
+    color: #e4e6ea;
+}
+
+.liked {
+    color: #f91880; /* Pink/red heart color like Instagram */
+    animation: likePulse 0.3s ease;
+}
+
+@keyframes likePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.3); }
+    100% { transform: scale(1); }
+}
+
+.post-card {
+    border-radius: 16px; /* Softer rounded corners */
+    overflow: hidden;
+    background: white;
+    border: none;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.1), 0 8px 24px rgba(0,0,0,0.08); /* Subtle shadow for depth */
+    max-width: 500px; /* Center-aligned feed width */
+    margin: 0 auto 24px; /* Spacing like a centered feed */
+}
+
+.action-links a {
+    text-decoration: none;
+    margin: 0 8px;
+    font-weight: 600;
+    border-radius: 20px; /* Pill-shaped buttons */
+    padding: 8px 16px;
+    transition: background-color 0.2s;
+}
+
+.action-links a:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.comment-box p {
+    margin-bottom: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid #e4e6ea; /* Subtle separators */
+}
+
+.comment-box p:last-child {
+    border-bottom: none;
+}
+
+.comment-box .text-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); /* Gradient for usernames */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.comment-box .text-muted {
+    color: #8b949e !important;
+}
+
+.input-group .form-control {
+    border-radius: 20px 0 0 20px; /* Rounded input */
+    border: 1px solid #e4e6ea;
+}
+
+.input-group .btn {
+    border-radius: 0 20px 20px 0;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
+}
+
+.input-group .btn:hover {
+    transform: translateX(2px);
+    box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+}
+
+.like-count {
+    font-weight: 500;
+    background: #f0f2f5 !important;
+    border-radius: 12px;
+    padding: 4px 8px;
+}
+
+.card-body {
+    padding: 16px;
+}
+
+.fw-semibold {
+    font-size: 16px;
+    line-height: 1.4;
+    color: #1c1e21;
+    margin-bottom: 12px;
+}
+
+.container {
+    max-width: 600px; /* Narrower for mobile-like feed */
+    padding: 0 16px;
+}
+
+h3 {
+    font-weight: 700;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.d-flex.justify-content-center {
+    gap: 12px;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background: #e4e6ea;
+    margin: 16px 0;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .post-img {
+        height: 300px;
+    }
+
+    .container {
+        padding: 0 8px;
+    }
+}
+</style>
+
+<div class="container mt-4">
+
+    <h3 class="text-center mb-4" id="ab">
+        <u>My Posts</u>
+    </h3>
+
+    <!-- ACTION BUTTONS -->
+    <div class="d-flex justify-content-center mb-4 action-links">
+        <a href="/myapp/expert_add_post/" class="btn btn-success btn-sm">
+            ➕ Add New
+        </a>
+        <a href="/myapp/expert_view_others_post/" class="btn btn-outline-primary btn-sm">
+            👥 Others Post
+        </a>
+    </div>
+
+    {% for post in posts %}
+    <div class="card mb-4 shadow post-card">
+
+        <img src="/media/{{ post.post }}" class="post-img card-img-top">
+
+        <div class="card-body">
+
+            <p class="fw-semibold">{{ post.caption }}</p>
+
+            <!-- LIKE SECTION -->
+            <div class="mb-2">
+                {% if post.id in liked_posts %}
+                    <span class="like-btn liked"
+                          onclick="toggleLike({{ post.id }}, this)">❤️</span> <!-- Changed to heart for social feel -->
+                {% else %}
+                    <span class="like-btn"
+                          onclick="toggleLike({{ post.id }}, this)">❤️</span> <!-- Changed to heart for social feel -->
+                {% endif %}
+                <span class="ms-2 like-count badge bg-light text-dark">
+                    {{ post.like_set.count }} Likes
+                </span>
+            </div>
+
+            <hr>
+
+            <!-- COMMENTS -->
+            <div class="comment-box">
+                {% for c in post.comment_set.all %}
+                    <p>
+                        <b class="text-primary">{{ c.USERID.username }}</b> :
+                        {{ c.comment }}
+                    </p>
+                {% empty %}
+                    <p class="text-muted fst-italic">No comments yet</p>
+                {% endfor %}
+            </div>
+
+            <!-- ADD COMMENT -->
+            <form method="POST" action="/myapp/comment/{{ post.id }}/">
+                {% csrf_token %}
+                <div class="input-group mt-3">
+                    <input type="text" name="comment" class="form-control"
+                           placeholder="Write a comment..." required>
+                    <button class="btn btn-primary">
+                        Post
+                    </button>
+                </div>
+            </form>
+
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+
+<script>
+function toggleLike(postId, el) {
+    fetch(`/myapp/like/${postId}/`)
+    .then(res => res.json())
+    .then(data => {
+        el.classList.toggle('liked', data.liked);
+        el.nextElementSibling.innerText = data.count + " Likes";
+    });
+}
+</script>
+
+{% endblock %}

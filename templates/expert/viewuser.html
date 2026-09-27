@@ -1,0 +1,69 @@
+
+
+
+{% extends "expert/index.html" %}
+{% block body %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>View User</title>
+    <style>
+        table {
+            width: 75%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #4b1717;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+
+<body>
+<header>
+    <center>
+        <h1><u>View User</u></h1>
+        <div class="note" id="ab"><strong>User Details</strong></div>
+    </center>
+</header>
+
+<center>
+<table>
+    <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Place</th>
+        <th>Post</th>
+        <th>Image</th>
+    </tr>
+
+    {% for i in data %}
+    <tr>
+        <td>{{ i.name }}</td>
+        <td>{{ i.email }}</td>
+        <td>{{ i.phone }}</td>
+        <td>{{ i.place }}</td>
+        <td>{{ i.post }}</td>
+        <td>
+            <img src="{{ i.image }}" width="80" height="80">
+        </td>
+            <td><a href="/myapp/expert_chat_to_user/{{ i.LOGIN.id }}" class="btn btn-success">Chat</a> </td>
+
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="6">No users found</td>
+    </tr>
+    {% endfor %}
+
+</table>
+</center>
+
+</body>
+{% endblock %}

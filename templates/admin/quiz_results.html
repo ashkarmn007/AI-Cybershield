@@ -1,0 +1,89 @@
+{% extends "admin/admin_index1.html" %}
+{% block body %}
+
+<div class="container my-4">
+    <h1 class="mb-4">All Quiz Attempts</h1>
+
+    {% if attempts %}
+        <!-- Search Box -->
+        <div class="mb-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="Search by username, email or score...">
+        </div>
+
+        <div id="attemptsContainer">
+            {% for attempt in attempts %}
+                <div class="card mb-4 shadow-sm attempt-card">
+                    <div class="card-header bg-primary text-white">
+                        <strong class="username">{{ attempt.user.username }}</strong>
+                        {% if attempt.user.first_name or attempt.user.last_name %}
+                            ({{ attempt.user.first_name }} {{ attempt.user.last_name }})
+                        {% endif %}
+                        <span class="float-end score">
+                            <strong>Score:</strong> {{ attempt.total_score }} / {{ attempt.answers.count }}
+                            | <strong>Started:</strong> {{ attempt.started_at|date:"Y-m-d H:i" }}
+                        </span>
+                    </div>
+                    <div class="card-body">
+                        <p><strong>Email:</strong> <span class="email">{{ attempt.user.email }}</span></p>
+
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover align-middle">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Question</th>
+                                        <th>Selected Answer</th>
+                                        <th>Correct</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for answer in attempt.answers.all %}
+                                        <tr class="{% if answer.is_correct %}table-success{% else %}table-danger{% endif %}">
+                                            <td>{{ forloop.counter }}</td>
+                                            <td>{{ answer.question.question_text }}</td>
+                                            <td>
+                                                {% if answer.selected_choice %}
+                                                    {{ answer.selected_choice.choice_text }}
+                                                {% else %}
+                                                    <span class="text-muted">No answer</span>
+                                                {% endif %}
+                                            </td>
+                                            <td>
+                                                {% if answer.is_correct %}
+                                                    <span class="badge bg-success">Yes</span>
+                                                {% else %}
+                                                    <span class="badge bg-danger">No</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">No quiz attempts yet.</div>
+    {% endif %}
+</div>
+
+<!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+$(document).ready(function() {
+    $("#searchInput").on("keyup", function() {
+        var value = $(this).val().toLowerCase();
+        $(".attempt-card").filter(function() {
+            $(this).toggle(
+                $(this).find(".username").text().toLowerCase().indexOf(value) > -1 ||
+                $(this).find(".email").text().toLowerCase().indexOf(value) > -1 ||
+                $(this).find(".score").text().toLowerCase().indexOf(value) > -1
+            );
+        });
+    });
+});
+</script>
+
+{% endblock %}

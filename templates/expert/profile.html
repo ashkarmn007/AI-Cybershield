@@ -1,0 +1,68 @@
+{% extends "expert/index.html" %}
+
+{% block body %}
+
+<style>
+
+</style>
+
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="profile-card">
+        <h2 class="text-center text-primary mb-4" id="ab"><u>View Profile</u></h2>
+
+        <table class="table table-borderless">
+            <tr>
+                <td><strong>Name:</strong></td>
+                <td>{{ data.name }}</td>
+            </tr>
+            <tr>
+                <td><strong>Email:</strong></td>
+                <td>{{ data.email }}</td>
+            </tr>
+            <tr>
+                <td><strong>Phone:</strong></td>
+                <td>{{ data.phone }}</td>
+            </tr>
+            <tr>
+                <td><strong>Place:</strong></td>
+                <td>{{ data.place }}</td>
+            </tr>
+            <tr>
+                <td><strong>Qualification:</strong></td>
+                <td>{{ data.qualification }}</td>
+            </tr>
+            <tr>
+                <td><strong>Post:</strong></td>
+                <td>{{ data.post }}</td>
+            </tr>
+            <tr>
+    <td><strong>Main Certificate:</strong></td>
+    <td><a href="{{ data.certificate.url }}" target="_blank">View</a></td>
+</tr>
+
+{% if data.certificate1 %}
+<tr>
+    <td><strong>Certificate 1:</strong></td>
+    <td><a href="{{ data.certificate1.url }}" target="_blank">View</a></td>
+    <td><a href="/myapp/deletecert1/{{ data.id }}" >Remove</a></td>
+</tr>
+{% endif %}
+
+{% if data.certificate2 %}
+<tr>
+    <td><strong>Certificate 2:</strong></td>
+    <td><a href="{{ data.certificate2.url }}" target="_blank">View</a></td>
+    <td><a href="/myapp/deletecert2/{{ data.id }}" >Remove</a></td>
+</tr>
+{% endif %}
+        </table>
+
+        <div class="text-center mt-4">
+            <a href="/myapp/edit_profile/" class="btn btn-info text-white">
+                Edit Profile
+            </a>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

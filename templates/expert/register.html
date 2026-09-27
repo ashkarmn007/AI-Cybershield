@@ -1,0 +1,312 @@
+{#<!DOCTYPE html>#}
+{#<html lang="en">#}
+{#<head>#}
+{#    <meta charset="UTF-8">#}
+{#    <meta name="viewport" content="width=device-width, initial-scale=1.0">#}
+{#    <title>register</title>#}
+{#        <style>#}
+{#        div{#}
+{#            width: 350px;#}
+{#            border: 2px solid black;  /* outline */#}
+{#            padding: 20px;#}
+{#        }#}
+{#        label{#}
+{#            display: inline-block;#}
+{#            width: 100px;#}
+{#        }#}
+{#        #r{#}
+{#            color: white;#}
+{#            background-color: red;#}
+{#        }#}
+{#        #t{#}
+{#            background-color: rgb(149, 149, 149);#}
+{#        }#}
+{#    </style>#}
+{#</head>#}
+{#<body>#}
+{#    <center>#}
+{#        <header><h1><u>Register</u></h1></header>#}
+{#        <b>#}
+{#        <div  id="t">#}
+{#            <form action="/myapp/register_post/" method="post">#}
+{#                {% csrf_token %}#}
+{##}
+{#                <table>#}
+{#                    <tr>#}
+{#                        <td>Name&nbsp;:</td>#}
+{#                        <td><input type="text" name="name" required></td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td>email&nbsp;&nbsp;:</td>#}
+{#                        <td><input type="email" name="email" required></td>#}
+{#                    </tr>#}
+{#                     <tr>#}
+{#                        <td>Phone&nbsp;:</td>#}
+{#                        <td><input type="number" name="phone" required></td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td>Place&nbsp;&nbsp;:</td>#}
+{#                        <td><input type="text" name="place" required></td>#}
+{#                    </tr>#}
+{#                    <tr>#}
+{#                        <td>Qualification&nbsp;&nbsp;:</td>#}
+{#                        <td><input type="text" name="qualification" required></td>#}
+{#                    </tr>#}
+{##}
+{#                    <tr>#}
+{#                        <td>Post&nbsp;&nbsp;&nbsp;:</td>#}
+{#                        <td><input type="text" name="post" required></td>#}
+{#                    </tr>#}
+{##}
+{#                    <tr>#}
+{#                        <td>Username&nbsp;&nbsp;:</td>#}
+{#                        <td><input type="text" name="username" required></td>#}
+{#                    </tr>#}
+{##}
+{#                    <tr>#}
+{#                        <td>Password&nbsp;&nbsp;:</td>#}
+{#                        <td><input type="password" name="password" required></td>#}
+{#                    </tr>#}
+{#                </table><br>#}
+{#                <button type="submit" id="r">Register</button>#}
+{#            </form>#}
+{#        </div>#}
+{#        </b>#}
+{#    </center>#}
+{#</body>#}
+{#</html>#}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-image: url('/static/login/images/cybersecurity.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Arial', sans-serif;
+        }
+        .register-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+        }
+        .form-header {
+            text-align: center;
+            color: #4a5568;
+            margin-bottom: 2rem;
+        }
+        .form-header h1 {
+            color: #e53e3e;
+            text-decoration: underline;
+            font-weight: bold;
+        }
+        .form-label {
+            font-weight: 600;
+            color: #2d3748;
+        }
+        .btn-register {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            border: none;
+            color: white;
+            font-weight: bold;
+            padding: 0.75rem 2rem;
+            border-radius: 25px;
+            transition: transform 0.2s;
+        }
+        .btn-register:hover {
+            transform: translateY(-2px);
+            color: white;
+        }
+        .error-message {
+            color: #e53e3e;
+            font-size: 0.875rem;
+            margin-top: 0.25rem;
+        }
+        input:invalid {
+            border-color: #e53e3e;
+        }
+        input:valid {
+            border-color: #38a169;
+        }
+        .row > div {
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body>
+
+{% for i in messages %}
+<script>alert('{{ i }}')</script>
+{% endfor %}
+    <div class="register-card">
+        <div class="form-header">
+            <h1>Register</h1>
+        </div>
+        <form action="/myapp/register_post/" method="post" novalidate enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="name" class="form-label">Name:</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Email:</label>
+                    <input type="email" class="form-control" id="email" name="email" required
+                           pattern="^[a-zA-Z0-9._%+-]+@gmail\.com$"
+                           title="Email must end with @gmail.com">
+                    <div class="error-message" id="email-error"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="phone" class="form-label">Phone:</label>
+                    <input type="text" class="form-control" id="phone" name="phone" required
+                           pattern="^[6-9][0-9]{9}$"
+                           title="Phone must be exactly 10 digits starting with 6-9"
+                           maxlength="10" minlength="10">
+                    <div class="error-message" id="phone-error"></div>
+                </div>
+                <div class="col-md-6">
+                    <label for="place" class="form-label">Place:</label>
+                    <input type="text" class="form-control" id="place" name="place" required>
+                </div>
+            </div>
+
+            <div class="row">
+               <div class="row">
+    <div class="col-md-6">
+        <label for="qualification" class="form-label">Qualification:</label>
+        <input type="text" class="form-control" id="qualification" name="qualification" required>
+    </div>
+    <div class="col-md-6">
+        <label for="certificate" class="form-label">Upload Certificate:</label>
+        <input type="file" class="form-control" id="certificate" name="certificate" required>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <label for="certificate1" class="form-label">Upload Certificate 1 (Optional):</label>
+        <input type="file" class="form-control" id="certificate1" name="certificate1">
+    </div>
+    <div class="col-md-6">
+        <label for="certificate2" class="form-label">Upload Certificate 2 (Optional):</label>
+        <input type="file" class="form-control" id="certificate2" name="certificate2">
+    </div>
+</div>
+                <div class="col-md-6">
+                    <label for="post" class="form-label">Post:</label>
+                    <input type="text" class="form-control" id="post" name="post" required
+                           pattern="[a-zA-Z\s]+"
+                           title="Post must contain alphabets only (letters and spaces)">
+                    <div class="error-message" id="post-error"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="username" class="form-label">Username:</label>
+                    <input type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="password" class="form-label">Password:</label>
+                    <input type="password" class="form-control" id="password" name="password" required>
+                </div>
+            </div>
+
+            <div class="d-grid mt-3">
+                <button type="submit" class="btn btn-register">Register</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Custom validation feedback for better UX
+        const form = document.querySelector('form');
+        const emailInput = document.getElementById('email');
+        const phoneInput = document.getElementById('phone');
+        const postInput = document.getElementById('post');
+
+        function showError(input, message, errorDiv) {
+            input.classList.add('is-invalid');
+            input.classList.remove('is-valid');
+            errorDiv.textContent = message;
+        }
+
+        function clearError(input, errorDiv) {
+            input.classList.add('is-valid');
+            input.classList.remove('is-invalid');
+            errorDiv.textContent = '';
+        }
+
+        emailInput.addEventListener('input', function() {
+            const emailError = document.getElementById('email-error');
+            if (this.validity.valid) {
+                clearError(this, emailError);
+            } else if (this.value !== '') {
+                showError(this, 'Email must end with @gmail.com', emailError);
+            }
+        });
+
+        phoneInput.addEventListener('input', function() {
+            const phoneError = document.getElementById('phone-error');
+            if (this.validity.valid) {
+                clearError(this, phoneError);
+            } else if (this.value !== '') {
+                showError(this, 'Phone must be exactly 10 digits starting with 6-9', phoneError);
+            }
+        });
+
+        postInput.addEventListener('input', function() {
+            const postError = document.getElementById('post-error');
+            if (this.validity.valid) {
+                clearError(this, postError);
+            } else if (this.value !== '') {
+                showError(this, 'Post must contain alphabets only (letters and spaces)', postError);
+            }
+        });
+
+        form.addEventListener('submit', function(e) {
+            let isValid = true;
+            if (!emailInput.validity.valid) {
+                showError(emailInput, 'Email must end with @gmail.com', document.getElementById('email-error'));
+                isValid = false;
+            }
+            if (!phoneInput.validity.valid) {
+                showError(phoneInput, 'Phone must be exactly 10 digits starting with 6-9', document.getElementById('phone-error'));
+                isValid = false;
+            }
+            if (!postInput.validity.valid) {
+                showError(postInput, 'Post must contain alphabets only (letters and spaces)', document.getElementById('post-error'));
+                isValid = false;
+            }
+            if (!isValid) {
+                e.preventDefault();
+            }
+        });
+    </script>
+</body>
+</html>

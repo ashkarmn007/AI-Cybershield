@@ -1,0 +1,70 @@
+{#{% extends "admin/admin_index1.html" %}#}
+{#{% block body %}<html>#}
+{#<head>#}
+{#    <title>Add Question</title>#}
+{#</head>#}
+{#<body>#}
+{#<h2>Add Quiz Question</h2>#}
+{##}
+{#<form method="post">#}
+{#    {% csrf_token %}#}
+{#    <label>Question:</label><br>#}
+{#    <input type="text" name="question" required><br><br>#}
+{##}
+{#    {% for i in "1234" %}#}
+{#        <label>Option {{ i }}:</label>#}
+{#        <input type="text" name="choice{{ i }}" required>#}
+{#        <input type="radio" name="correct" value="{{ i }}" required>#}
+{#        Correct<br><br>#}
+{#    {% endfor %}#}
+{##}
+{#    <button type="submit">Save</button>#}
+{#</form>#}
+{##}
+{#<a href="/myapp/question_list/">Back</a>#}
+{#</body>#}
+{#</html>#}
+{##}
+{#{% endblock %}#}
+
+
+
+{% extends "admin/admin_index1.html" %}
+{% block body %}
+
+<div class="container my-4">
+    <h2 class="mb-4">Add Quiz Question</h2>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <!-- Question Text -->
+        <div class="mb-3">
+            <label for="question" class="form-label">Question</label>
+            <input type="text" class="form-control" id="question" name="question" required>
+        </div>
+
+        <!-- Choices -->
+        <div class="mb-3">
+            <label class="form-label">Options (Select Correct Answer)</label>
+            {% for i in "1234" %}
+                <div class="input-group mb-2">
+                    <span class="input-group-text">Option {{ i }}</span>
+                    <input type="text" class="form-control" name="choice{{ i }}" required>
+                    <div class="input-group-text">
+                        <input class="form-check-input mt-0" type="radio" name="correct" value="{{ i }}" required>
+                        Correct
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save Question</button>
+        <a href="/myapp/question_list/" class="btn btn-secondary ms-2">Back</a>
+    </form>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+{% endblock %}

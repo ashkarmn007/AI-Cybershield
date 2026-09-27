@@ -1,0 +1,32 @@
+{#<!DOCTYPE html>#}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send</title>
+    <style>
+        div{
+             width: 300px;
+            border: 2px solid black;  /* outline */
+            padding: 20px;  
+        }
+    </style>
+</head>
+<body>
+<form action="/myapp/send_reply_post/"method="post">
+    {% csrf_token %}
+    <center>
+        <h1>Send Reply</h1>
+        <div>
+            <table>
+                <tr>
+                    <td>Reply &nbsp;:&nbsp; </td>
+<td><textarea rows="5" cols="20" name="reply"></textarea></td>
+</tr>
+</table><br>
+<button type="submit">Send</button>
+        </div>
+    </center>
+    </form>
+</body>
+</html>
